@@ -1,16 +1,704 @@
 
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#5865F2" />
-    <meta name="description" content="External.ui - Directorio de bots de Discord" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>External.ui - Directorio de Bots de Discord</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <style>
+        /* Variables CSS */
+        :root {
+            --primary: #5865F2;
+            --secondary: #4f545c;
+            --background: #36393f;
+            --card: #2f3136;
+            --text: #ffffff;
+            --text-secondary: #b9bbbe;
+            --success: #43b581;
+            --warning: #faa61a;
+            --danger: #f04747;
+            --border: rgba(255,255,255,0.1);
+        }
+
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--card);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #4752c4;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), #3a43a7);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+            background-color: rgba(0,0,0,0.2);
+            color: var(--text);
+        }
+
+        .search-button {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .search-button:hover {
+            background-color: #3ca374;
+        }
+
+        /* Stats Widget */
+        .stats-widget {
+            padding: 2rem 0;
+            background-color: var(--card);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Bot Cards */
+        .bots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .bot-card {
+            background-color: var(--card);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid var(--border);
+        }
+
+        .bot-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .bot-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .bot-title h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .category {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .bot-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .bot-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .featured-badge {
+            background-color: var(--warning);
+            color: black;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .bot-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-vote, .btn-invite {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .btn-vote {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-invite {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-vote:hover, .btn-invite:hover {
+            opacity: 0.8;
+        }
+
+        /* Top Bots List */
+        .top-section {
+            padding: 3rem 0;
+        }
+
+        .top-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .top-bots-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .top-bot-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: var(--card);
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .position {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), #3a43a7);
+            padding: 4rem 0;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--card);
+            padding: 3rem 0 1rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3, .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--text);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                border-radius: 4px;
+                margin-bottom: 0.5rem;
+            }
+            
+            .search-button {
+                border-radius: 4px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="/" class="logo-text">🤖 External.ui</a>
+            
+            <nav class="nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="#bots" class="nav-link">Bots</a>
+                <a href="#servers" class="nav-link">Servers</a>
+                <a href="#add" class="nav-link btn-primary">Add Bot</a>
+            </nav>
+            
+            <div class="user-actions">
+                <a href="#login" class="nav-link">Login</a>
+                <a href="#signup" class="nav-link">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Find the perfect Discord bot</h1>
+            <p>The best place to discover, vote, and manage Discord bots</p>
+            
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    placeholder="Search for bots..." 
+                    class="search-input"
+                    id="searchInput"
+                />
+                <button class="search-button" onclick="searchBots()">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-widget">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">1,250+</div>
+                    <div class="stat-label">Bots</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">45,200+</div>
+                    <div class="stat-label">Votes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8,900+</div>
+                    <div class="stat-label">Servers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">125,000+</div>
+                    <div class="stat-label">Users</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Bots -->
+    <section class="featured-section">
+        <div class="container">
+            <h2>⭐ Featured Bots</h2>
+            <div class="bots-grid">
+                <div class="bot-card">
+                    <div class="bot-header">
+                        <div class="bot-avatar">PB</div>
+                        <div class="bot-title">
+                            <h3>PremiumBot</h3>
+                            <span class="category">Utility</span>
+                        </div>
+                    </div>
+                    
+                    <p class="bot-description">Advanced multi-purpose bot with premium features and 24/7 support</p>
+                    
+                    <div class="bot-stats">
+                        <span class="votes">📊 5,420 votes</span>
+                        <span class="featured-badge">⭐ Featured</span>
+                    </div>
+                    
+                    <div class="bot-actions">
+                        <button class="btn-vote">Vote</button>
+                        <button class="btn-invite">Invite</button>
+                    </div>
+                </div>
+                
+                <div class="bot-card">
+                    <div class="bot-header">
+                        <div class="bot-avatar">MM</div>
+                        <div class="bot-title">
+                            <h3>MusicMaster</h3>
+                            <span class="category">Music</span>
+                        </div>
+                    </div>
+                    
+                    <p class="bot-description">High-quality music player with 24/7 radio and +1000 stations</p>
+                    
+                    <div class="bot-stats">
+                        <span class="votes">📊 4,890 votes</span>
+                        <span class="featured-badge">⭐ Featured</span>
+                    </div>
+                    
+                    <div class="bot-actions">
+                        <button class="btn-vote">Vote</button>
+                        <button class="btn-invite">Invite</button>
+                    </div>
+                </div>
+                
+                <div class="bot-card">
+                    <div class="bot-header">
+                        <div class="bot-avatar">G</div>
+                        <div class="bot-title">
+                            <h3>Guardian</h3>
+                            <span class="category">Moderation</span>
+                        </div>
+                    </div>
+                    
+                    <p class="bot-description">Advanced moderation and security system with AI detection</p>
+                    
+                    <div class="bot-stats">
+                        <span class="votes">📊 4,210 votes</span>
+                        <span class="featured-badge">⭐ Featured</span>
+                    </div>
+                    
+                    <div class="bot-actions">
+                        <button class="btn-vote">Vote</button>
+                        <button class="btn-invite">Invite</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Bots -->
+    <section class="top-section">
+        <div class="container">
+            <h2>🏆 Top Bots</h2>
+            <div class="top-bots-list">
+                <div class="top-bot-item">
+                    <span class="position">#1</span>
+                    <div class="bot-card compact">
+                        <div class="bot-info">
+                            <h3>SuperBot</h3>
+                            <span class="category">Utility</span>
+                            <div class="votes">📊 5,420 votes</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="top-bot-item">
+                    <span class="position">#2</span>
+                    <div class="bot-card compact">
+                        <div class="bot-info">
+                            <h3>MusicMaster</h3>
+                            <span class="category">Music</span>
+                            <div class="votes">📊 4,890 votes</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="top-bot-item">
+                    <span class="position">#3</span>
+                    <div class="bot-card compact">
+                        <div class="bot-info">
+                            <h3>Guardian</h3>
+                            <span class="category">Moderation</span>
+                            <div class="votes">📊 4,210 votes</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="top-bot-item">
+                    <span class="position">#4</span>
+                    <div class="bot-card compact">
+                        <div class="bot-info">
+                            <h3>GameBot</h3>
+                            <span class="category">Games</span>
+                            <div class="votes">📊 3,870 votes</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="top-bot-item">
+                    <span class="position">#5</span>
+                    <div class="bot-card compact">
+                        <div class="bot-info">
+                            <h3>FunBot</h3>
+                            <span class="category">Entertainment</span>
+                            <div class="votes">📊 3,240 votes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Want to add your bot?</h2>
+            <p>Join thousands of bot developers and showcase your creation</p>
+            <a href="#add" class="btn-primary">Add Your Bot</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>External.ui</h3>
+                    <p>The best place to discover Discord bots</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <a href="#api">API</a>
+                    <a href="#docs">Documentation</a>
+                    <a href="#widgets">Widgets</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#cookies">Cookie Policy</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="#help">Help Center</a>
+                    <a href="#contact">Contact Us</a>
+                    <a href="#status">Status</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 External.ui. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función de búsqueda simple
+        function searchBots() {
+            const query = document.getElementById('searchInput').value;
+            if (query) {
+                alert(`Buscando: ${query}\n(En una implementación real, esto mostraría resultados)`);
+            }
+        }
+
+        // Función para votar
+        function voteBot(botName) {
+            alert(`¡Voto registrado para ${botName}!\n(En una implementación real, esto guardaría el voto)`);
+        }
+
+        // Función para invitar
+        function inviteBot(botName) {
+            alert(`Enlace de invitación para ${botName}\n(En una implementación real, esto abriría el enlace)`);
+        }
+
+        // Añadir event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Botones de votar
+            const voteButtons = document.querySelectorAll('.btn-vote');
+            voteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const botCard = this.closest('.bot-card');
+                    const botName = botCard.querySelector('h3').textContent;
+                    voteBot(botName);
+                });
+            });
+
+            // Botones de invitar
+            const inviteButtons = document.querySelectorAll('.btn-invite');
+            inviteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const botCard = this.closest('.bot-card');
+                    const botName = botCard.querySelector('h3').textContent;
+                    inviteBot(botName);
+                });
+            });
+        });
+    </script>
+</body>
 </html>
