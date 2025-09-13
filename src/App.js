@@ -1,130 +1,134 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <header className="header">
-          <div className="container">
-            <h1 className="logo">🤖 Bot Directory</h1>
-            <nav className="nav">
-              <a href="/">Inicio</a>
-              <a href="/bots">Bots</a>
-              <a href="/add">Añadir Bot</a>
-            </nav>
+    <div className="App">
+      {/* Header como top.gg */}
+      <header className="topgg-header">
+        <div className="container">
+          <div className="logo">
+            <span className="logo-text">🤖 Bot Directory</span>
           </div>
-        </header>
-        
-        <main className="main">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/bots" element={<BotsPage />} />
-            <Route path="/add" element={<AddBotPage />} />
-          </Routes>
-        </main>
-        
-        <footer className="footer">
-          <div className="container">
-            <p>&copy; 2024 Bot Directory. Todos los derechos reservados.</p>
-          </div>
-        </footer>
-      </div>
-    </Router>
-  );
-}
+          <nav className="nav">
+            <a href="/" className="nav-link active">Home</a>
+            <a href="/bots" className="nav-link">Bots</a>
+            <a href="/servers" className="nav-link">Servers</a>
+            <a href="/add" className="nav-link">Add Bot</a>
+            <a href="/login" className="nav-link">Login</a>
+          </nav>
+        </div>
+      </header>
 
-// Componente Home
-function Home() {
-  return (
-    <div className="page">
-      <div className="hero">
-        <h2>Encuentra los mejores bots para Discord</h2>
-        <p>Descubre, vota y añade bots increíbles a tu servidor</p>
-        <div className="cta-buttons">
-          <a href="/add" className="btn-primary">Añadir tu bot</a>
-          <a href="/bots" className="btn-secondary">Explorar bots</a>
+      {/* Hero section */}
+      <section className="hero">
+        <div className="container">
+          <h1>Find the perfect Discord bot</h1>
+          <p>The best place to discover, vote, and manage Discord bots</p>
+          <div className="search-box">
+            <input 
+              type="text" 
+              placeholder="Search for bots..." 
+              className="search-input"
+            />
+            <button className="search-button">Search</button>
+          </div>
         </div>
-      </div>
-      
-      <div className="stats">
-        <div className="stat-item">
-          <h3>1,250+</h3>
-          <p>Bots registrados</p>
+      </section>
+
+      {/* Stats */}
+      <section className="stats">
+        <div className="container">
+          <div className="stat-item">
+            <div className="stat-number">1,250+</div>
+            <div className="stat-label">Bots</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-number">45,200+</div>
+            <div className="stat-label">Votes</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-number">8,900+</div>
+            <div className="stat-label">Servers</div>
+          </div>
         </div>
-        <div className="stat-item">
-          <h3>45,200+</h3>
-          <p>Votos totales</p>
+      </section>
+
+      {/* Featured bots */}
+      <section className="featured">
+        <div className="container">
+          <h2>⭐ Featured Bots</h2>
+          <div className="bots-grid">
+            <BotCard 
+              name="PremiumBot" 
+              description="Advanced multi-purpose bot" 
+              votes="5,420" 
+              category="Utility"
+            />
+            <BotCard 
+              name="MusicMaster" 
+              description="High-quality music player" 
+              votes="4,890" 
+              category="Music"
+            />
+            <BotCard 
+              name="Guardian" 
+              description="Advanced moderation system" 
+              votes="4,210" 
+              category="Moderation"
+            />
+          </div>
         </div>
-        <div className="stat-item">
-          <h3>8,900+</h3>
-          <p>Servidores activos</p>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-content">
+            <div className="footer-section">
+              <h3>Bot Directory</h3>
+              <p>Discover amazing Discord bots</p>
+            </div>
+            <div className="footer-section">
+              <h4>Links</h4>
+              <a href="/about">About</a>
+              <a href="/api">API</a>
+              <a href="/docs">Documentation</a>
+            </div>
+          </div>
+          <div className="copyright">
+            &copy; 2024 Bot Directory. All rights reserved.
+          </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
 
-// Componente BotsPage
-function BotsPage() {
+// Componente para tarjetas de bots
+function BotCard({ name, description, votes, category }) {
   return (
-    <div className="page">
-      <h2>🤖 Lista de Bots</h2>
-      <div className="bots-grid">
-        <div className="bot-card">
-          <img src="https://placehold.co/50x50" alt="Bot" />
-          <div className="bot-info">
-            <h3>SuperBot</h3>
-            <p>Bot multifuncional para servidores</p>
-            <div className="bot-meta">
-              <span>📊 5,420 votos</span>
-              <span>🏷️ Utilidad</span>
-            </div>
-          </div>
-        </div>
-        <div className="bot-card">
-          <img src="https://placehold.co/50x50" alt="Bot" />
-          <div className="bot-info">
-            <h3>MusicMaster</h3>
-            <p>Reproductor de música premium</p>
-            <div className="bot-meta">
-              <span>📊 4,890 votos</span>
-              <span>🏷️ Música</span>
-            </div>
-          </div>
+    <div className="bot-card">
+      <div className="bot-header">
+        <img 
+          src="https://placehold.co/50x50" 
+          alt={name}
+          className="bot-avatar"
+        />
+        <div className="bot-info">
+          <h3>{name}</h3>
+          <span className="bot-category">{category}</span>
         </div>
       </div>
-    </div>
-  );
-}
-
-// Componente AddBotPage
-function AddBotPage() {
-  return (
-    <div className="page">
-      <h2>➕ Añadir Bot</h2>
-      <form className="add-bot-form">
-        <div className="form-group">
-          <label>ID del Bot:</label>
-          <input type="text" placeholder="123456789012345678" />
-        </div>
-        <div className="form-group">
-          <label>Descripción:</label>
-          <textarea placeholder="Describe tu bot..."></textarea>
-        </div>
-        <div className="form-group">
-          <label>Categoría:</label>
-          <select>
-            <option>Utilidad</option>
-            <option>Música</option>
-            <option>Moderación</option>
-            <option>Juegos</option>
-          </select>
-        </div>
-        <button type="submit" className="btn-primary">Añadir Bot</button>
-      </form>
+      <p className="bot-description">{description}</p>
+      <div className="bot-stats">
+        <span className="votes">📊 {votes} votes</span>
+      </div>
+      <div className="bot-actions">
+        <button className="btn-vote">Vote</button>
+        <button className="btn-invite">Invite</button>
+      </div>
     </div>
   );
 }
